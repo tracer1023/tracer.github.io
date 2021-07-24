@@ -36,6 +36,58 @@ let book_clone = deepClone(book)
 console.log(book_clone === book);
 console.log(book_clone);
 
+
+
+
+
+
+
+const clone = (obj) => {
+    const isObject = (o) => {
+        if (o === null || o === undefined) {
+            return o
+        } else {
+            return Object.prototype.toString.call(o).splice(8, -1)
+        }
+    }
+
+    //weakMap用来保存已经复制过的object，WeakMap<Object，boolean>
+    let map = new WeakMap()
+
+    const dp = (object) => {
+        let result;
+        //判断当前复制操作时的对象类型
+        if (isObject(object) == 'Object') {
+            result = {}
+        } else if (isObject(object) == 'Array') {
+            result = []
+        } else {
+            //直接返回基础类型
+            return object
+        }
+        for (let key in object) {
+            const keyType = isObject(object[key]);
+            const copy = object[key]
+            if (map.get(copy)) {
+                return copy;
+            } else if (keyType == 'Object') {
+                //当前是对象，先缓存
+                map.set(copy, true)
+                result[key] = dp(copy)
+            } else if (keyType == 'Array') {
+                result[key] = dp[copy]
+            } else {
+                result;
+            }
+        }
+        return result;
+    }
+    const res = dp(obj)
+    return res
+}
+
+
+
 /**
  * 手写深度比较
  * 深度比较两个对象的值是否完全相同

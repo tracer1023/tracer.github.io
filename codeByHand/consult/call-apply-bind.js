@@ -80,6 +80,32 @@ Function.prototype.bind = function (context) {
     }
 }
 
+//bind类似call，但是返回的是一个函数，利用apply来实现
+/**
+ * bind可以传递多个参数，第一个参数是要绑定给它调用的函数的上下文，其他的参数将会作为预设参数传递给这个参数
+ * let foo = function(){
+ *  console.log(arguments)
+ * }
+ * foo.bind(null,'a','b')('c','d','e')
+ * 
+ * 
+ */
+Function.prototype.bind = function (context) {
+    var fn = this;
+    let arg = [...arguments].slice(1)
+    return function F() {
+        if (this instanceof F) {
+            return new fn(...args, ...arguments)
+        } else {
+            return fn.apply(context, arg.concat(...arguments))
+        }
+    }
+}
+
+
+
+
+
 /**
  * 简洁版的call和apply
  * 函数的实现都借助了调用，利用第一个参数做了中转，调用完后删除
