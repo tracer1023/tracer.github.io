@@ -26,13 +26,11 @@ Function.prototype.bind = function (context) {
     }
 }
 
-
 function myNew(fn, ...args) {
     const thisObj = Object.create(fn.prototype)
     let result = fn.apply(thisObj, ...args)
     return typeof result == 'object' ? result : thisObj
 }
-
 
 function debounce(fn, delay) {
     let timer = null
